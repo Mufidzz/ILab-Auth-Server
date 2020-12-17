@@ -10,8 +10,7 @@ import (
 type Body struct {
 	IAT int64
 	ISS string
-	SLV string
-	UID string
+	UID uint
 	RO  string
 }
 
