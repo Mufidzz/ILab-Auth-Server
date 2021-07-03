@@ -1,11 +1,11 @@
 package data
 
 import (
-	"../auth"
-	"../config"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"infotech.umm.ac.id/auth/auth"
+	"infotech.umm.ac.id/auth/config"
 	"net/http"
 	"strings"
 	"time"
@@ -14,6 +14,10 @@ import (
 func (UserCredential) TableName() string {
 	return "user"
 }
+
+const domain = "localhost"
+
+//const domain = "infotech.umm.ac.id"
 
 type UserCredential struct {
 	gorm.Model
@@ -69,6 +73,11 @@ func (idb *InDB) GetUser(username string) (UserCredential, error) {
 	}
 
 	return data, nil
+}
+func (idb *InDB) UnauthorizeUser(c *gin.Context) {
+	c.SetCookie("ifx-ath", "", -1, "/", domain, false, true)
+	c.SetCookie("ifx-at", "", -1, "/", domain, false, false)
+	c.SetCookie("ifx-st", "", -1, "/", domain, false, true)
 }
 
 func (idb *InDB) AuthorizeUser(c *gin.Context) {
@@ -130,9 +139,9 @@ func (idb *InDB) AuthorizeUser(c *gin.Context) {
 
 	tokSplit := strings.Split(tok, ".")
 
-	c.SetCookie("ifx-ath", tokSplit[0], 0, "/", "192.168.1.20", false, true)
-	c.SetCookie("ifx-at", tokSplit[1], 0, "/", "192.168.1.20", false, false)
-	c.SetCookie("ifx-st", tokSplit[2], 0, "/", "192.168.1.20", false, true)
+	c.SetCookie("ifx-ath", tokSplit[0], 0, "/", domain, false, true)
+	c.SetCookie("ifx-at", tokSplit[1], 0, "/", domain, false, false)
+	c.SetCookie("ifx-st", tokSplit[2], 0, "/", domain, false, true)
 
 	c.JSON(http.StatusOK, "Authorized")
 	return

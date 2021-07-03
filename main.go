@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./config"
-	"./data"
+	"infotech.umm.ac.id/auth/config"
+	"infotech.umm.ac.id/auth/data"
 	//"github.com/Mufidzz/iflogs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -10,13 +10,13 @@ import (
 )
 
 func main() {
+	config.ClientDBInit()
 	db := config.DBInit()
 	InDB := data.InDB{DB: db}
-	//L := iflogs.Engine{Barrier: iflogs.Barrier{URL: "http://10.10.11.247:7777/auth-log/"}}
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins:        true,
-		AllowMethods:           []string{"GET", "POST", "PUT", "DELETE"},
+		AllowMethods:           []string{"GET", "POST"},
 		AllowHeaders:           []string{"Origin", "Content-Length", "Content-Type"},
 		AllowCredentials:       false,
 		ExposeHeaders:          nil,
@@ -27,10 +27,11 @@ func main() {
 		AllowFiles:             false,
 	}))
 	router.Use(ClientVerificator())
-	//router.Use(L.GinForwardMiddleware("AUTH"))
 	router.POST("/", InDB.AuthorizeUser)
+	router.GET("/clear", InDB.UnauthorizeUser)
 
 	err := router.Run(":6666")
+	//err := router.RunTLS(":6666", os.Getenv("TLS_CERT_FILE"), os.Getenv("TLS_KEY_FILE"))
 	if err != nil {
 		panic(err)
 	}

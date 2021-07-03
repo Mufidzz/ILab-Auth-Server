@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"bytes"
 	"crypto/rsa"
 	"encoding/json"
 	"github.com/lestrrat-go/jwx/jwa"
@@ -10,7 +9,7 @@ import (
 
 func ValidateJWT(tokenString []byte, privateKey *rsa.PrivateKey) (Body, error) {
 	var b Body
-	token, err := jwt.Parse(bytes.NewReader(tokenString), jwt.WithVerify(jwa.RS256, &privateKey.PublicKey))
+	token, err := jwt.Parse(tokenString, jwt.WithVerify(jwa.RS256, &privateKey.PublicKey))
 	if err != nil {
 		return Body{}, err
 	}

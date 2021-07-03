@@ -1,8 +1,8 @@
 package data
 
 import (
-	"../structs"
 	"github.com/gin-gonic/gin"
+	"infotech.umm.ac.id/auth/structs"
 )
 
 //Take all available Clients from Database

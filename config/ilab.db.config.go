@@ -1,11 +1,11 @@
 package config
 
 import (
-	"../structs"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"infotech.umm.ac.id/auth/structs"
 )
 
 //DB Credential, Change if Necessary
@@ -19,15 +19,16 @@ import (
 //	dbName2 = os.Getenv("DB_CLIENT_NAME")
 //)
 
-const username = "user1"
+const username = "root"
 const password = ""
-const dbName = "infotech.ilab"
+const dbName = "ilab-db"
 const dbName2 = "infotech.ilab.auth.client"
 
 //TODO: Documentation
 func DBInit() *gorm.DB {
-	//dsn := fmt.Sprintf("ocs_main:5a64ffaf5121a286a45d97bed73fc7d41337d0af442638279d6b067bb329afa9@(10.10.11.254:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", dbName)
-	dsn := fmt.Sprintf("user1:@(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", dbName)
+	//dsn := fmt.Sprintf("remote_ilab:remote_ilab@(10.10.11.254:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", dbName)
+	//dsn := fmt.Sprintf("ilab-demo:demodemodemodemodemodemodemo@(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", dbName)
+	dsn := fmt.Sprintf("root:@(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", dbName)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
@@ -48,7 +49,7 @@ func DBInit() *gorm.DB {
 }
 
 func ClientDBInit() *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@(127.0.0.1)/%s?charset=utf8mb4&parseTime=true&loc=Local", username, password, dbName2)
+	dsn := fmt.Sprintf("%s:%s@(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=true&loc=Local", username, password, dbName2)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
